@@ -19,105 +19,76 @@
             font-family: 'Arial', sans-serif;
         }
 
-        /* TELA DE AVISO PARA GIRAR O CELULAR */
-        #orientation-overlay {
+        /* --- TELA DE GIRO --- */
+        #orientacao-aviso {
             display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: var(--bg-app);
-            z-index: 9999;
-            color: white;
-            text-align: center;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            box-sizing: border-box;
-            padding: 40px;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, #7b3eb3, #4e2170); 
+            z-index: 9999; color: white; text-align: center;
+            flex-direction: column; justify-content: center; align-items: center;
+        }
+        
+        @media (orientation: portrait) {
+            #orientacao-aviso { display: flex; }
         }
 
-        #orientation-overlay img.logo-aviso { width: 150px; margin-bottom: 30px; }
-
-        .phone-icon {
-            width: 60px; height: 110px;
-            border: 4px solid white; border-radius: 10px;
-            margin-bottom: 25px;
-            animation: rotatePhone 2s infinite ease-in-out;
+        .aviso-logo { position: absolute; top: 30px; width: 120px; }
+        
+        .icone-giro-container {
+            width: 120px; height: 180px;
+            border: 4px solid white; border-radius: 20px;
+            display: flex; justify-content: center; align-items: center;
+            margin-bottom: 30px;
         }
 
-        @keyframes rotatePhone {
+        .icone-giro-seta { font-size: 60px; animation: girar-celular 2s infinite ease-in-out; }
+
+        @keyframes girar-celular {
             0% { transform: rotate(0deg); }
-            50% { transform: rotate(90deg); }
-            100% { transform: rotate(90deg); }
+            50% { transform: rotate(-90deg); }
+            100% { transform: rotate(0deg); }
         }
 
-        .logo-flutuante {
-            position: absolute; top: 10px; left: 10px;
-            z-index: 100; pointer-events: none;
-        }
-        .logo-flutuante img { width: 100px; height: auto; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3)); }
+        /* --- LAYOUT DO APP --- */
+        .logo-flutuante { position: absolute; top: 10px; left: 10px; z-index: 100; pointer-events: none; }
+        .logo-flutuante img { width: 100px; height: auto; }
 
         .app-container { display: flex; width: 100vw; height: 100vh; }
 
         .sidebar {
             width: 140px; background: var(--side-panel);
             display: flex; flex-direction: column; align-items: center;
-            padding: 10px 5px; padding-top: 100px; 
+            padding: 10px 5px; padding-top: 80px; 
             overflow-y: auto; flex-shrink: 0;
         }
 
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-        .label { color: white; font-size: 10px; font-weight: bold; margin: 10px 0 5px; text-transform: uppercase; letter-spacing: 1px; }
+        .label { color: white; font-size: 10px; font-weight: bold; margin: 10px 0 5px; text-transform: uppercase; }
 
         .btn {
             width: 50px; height: 50px; border-radius: 12px; border: none; background: white;
             font-size: 24px; cursor: pointer; box-shadow: 0 4px 0 #bbb;
             display: flex; align-items: center; justify-content: center;
         }
-        .btn.active { background: var(--active); box-shadow: 0 4px 0 #b3b300; transform: translateY(2px); }
+        .btn.active { background: var(--active); box-shadow: 0 4px 0 #b3b300; }
 
-        .c-btn { width: 44px; height: 44px; border-radius: 50%; border: 3px solid white; cursor: pointer; transition: 0.2s; }
+        .c-btn { width: 44px; height: 44px; border-radius: 50%; border: 3px solid white; cursor: pointer; box-sizing: border-box; }
         .c-btn.active { border-color: var(--active); transform: scale(1.1); box-shadow: 0 0 10px var(--active); }
 
-        .main-content {
-            flex-grow: 1; display: flex; justify-content: center; align-items: center;
-            padding: 10px; background: rgba(0,0,0,0.1); overflow: hidden;
-            position: relative;
-        }
+        .main-content { flex-grow: 1; display: flex; justify-content: center; align-items: center; padding: 10px; }
+        canvas { background: white; border-radius: 5px; max-width: 95%; max-height: 95%; cursor: crosshair; }
 
-        /* O Canvas agora fica dentro de um container de zoom */
-        #viewport {
-            width: 100%; height: 100%;
-            display: flex; justify-content: center; align-items: center;
-            touch-action: none;
-        }
-
-        canvas {
-            background: white; border-radius: 5px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
-            max-width: 95%; max-height: 95%;
-            object-fit: contain;
-            cursor: crosshair;
-            transform-origin: center center;
-        }
-
-        .sidebar-right { width: 130px; border-left: 1px solid rgba(255,255,255,0.1); padding-top: 10px; }
-        .thumb { width: 90px; margin-bottom: 12px; border-radius: 10px; cursor: pointer; background: white; border: 4px solid transparent; transition: 0.2s; }
-        .thumb.active { border-color: var(--active); transform: scale(1.05); }
-
-        .save-btn-large { grid-column: span 2; width: 100%; background: #2ed573 !important; color: white; font-size: 12px !important; font-weight: bold; box-shadow: 0 4px 0 #1e9651 !important; }
-
-        @media screen and (orientation: portrait) { #orientation-overlay { display: flex; } }
-        ::-webkit-scrollbar { width: 0; }
+        .sidebar-right { width: 130px; border-left: 1px solid rgba(255,255,255,0.1); padding-top: 10px; overflow-y: auto; }
+        .thumb { width: 90px; margin-bottom: 12px; border-radius: 10px; cursor: pointer; background: white; border: 4px solid transparent; }
+        .thumb.active { border-color: var(--active); }
     </style>
 </head>
 <body>
 
-<div id="orientation-overlay">
-    <img src="logo.png" alt="Popipi Kids" class="logo-aviso">
-    <div class="phone-icon"></div>
-    <h2>Gire o celular!</h2>
-    <p>Para desenhar com precisão e usar o zoom de pinça, use o aparelho deitado.</p>
+<div id="orientacao-aviso">
+    <img src="logo.png" class="aviso-logo">
+    <div class="icone-giro-container"><div class="icone-giro-seta">🔄</div></div>
+    <div class="aviso-texto"><h2>Gire o celular!</h2><p>Use o celular deitado para pintar.</p></div>
 </div>
 
 <div class="logo-flutuante"><img src="logo.png" alt="Popipi Kids"></div>
@@ -130,10 +101,12 @@
             <button class="btn" id="fillBtn" onclick="setTool('fill')">🪣</button>
             <button class="btn" id="eraserBtn" onclick="setTool('eraser')">🧽</button>
             <button class="btn" style="background:#ff4757; color:white;" onclick="clearCanvas()">🗑️</button>
-            <button class="btn save-btn-large" onclick="saveImage()">SALVAR 💾</button>
         </div>
+
         <div class="label">Cores</div>
         <div class="grid" id="colorGrid">
+            <div class="c-btn" style="background: #FFFFFF; border: 2px solid #ccc;" onclick="selectColor('#FFFFFF', this)"></div>
+            <div class="c-btn" style="background: #A9A9A9;" onclick="selectColor('#A9A9A9', this)"></div>
             <div class="c-btn active" style="background: #FFD700;" onclick="selectColor('#FFD700', this)"></div>
             <div class="c-btn" style="background: #FF8C00;" onclick="selectColor('#FF8C00', this)"></div>
             <div class="c-btn" style="background: #FF0000;" onclick="selectColor('#FF0000', this)"></div>
@@ -141,16 +114,14 @@
             <div class="c-btn" style="background: #9400D3;" onclick="selectColor('#9400D3', this)"></div>
             <div class="c-btn" style="background: #00BFFF;" onclick="selectColor('#00BFFF', this)"></div>
             <div class="c-btn" style="background: #32CD32;" onclick="selectColor('#32CD32', this)"></div>
-            <div class="c-btn" style="background: #000000;" onclick="selectColor('#000000', this)"></div>
+            <div class="c-btn" style="background: #1a1a1a;" onclick="selectColor('#1a1a1a', this)"></div>
             <div class="c-btn" style="background: #00008B;" onclick="selectColor('#00008B', this)"></div>
             <div class="c-btn" style="background: #8B4513;" onclick="selectColor('#8B4513', this)"></div>
         </div>
     </div>
 
     <div class="main-content">
-        <div id="viewport">
-            <canvas id="paintCanvas"></canvas>
-        </div>
+        <canvas id="paintCanvas"></canvas>
     </div>
 
     <div class="sidebar sidebar-right">
@@ -167,38 +138,22 @@
 <script>
     const canvas = document.getElementById('paintCanvas');
     const ctx = canvas.getContext('2d', { willReadFrequently: true });
-    const viewport = document.getElementById('viewport');
-    
     let currentImg = new Image();
     let currentColor = '#FFD700';
     let tool = 'brush';
     let painting = false;
 
-    // VARIÁVEIS DE ZOOM E PAN
-    let scale = 1;
-    let translateX = 0;
-    let translateY = 0;
-    let initialPinchDistance = null;
-    let isZooming = false;
-
-    function updateTransform() {
-        canvas.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
-    }
-
-    function resizeCanvasToFit() {
-        if (!currentImg.complete) return;
-        canvas.width = currentImg.width;
-        canvas.height = currentImg.height;
-        scale = 1; translateX = 0; translateY = 0;
-        updateTransform();
-        drawBase();
-    }
-
     function loadImage(src) {
         currentImg = new Image();
-        currentImg.crossOrigin = "anonymous";
-        currentImg.src = src;
-        currentImg.onload = () => resizeCanvasToFit();
+        // IMPORTANTE: Isso resolve o erro do balde no GitHub
+        currentImg.crossOrigin = "anonymous"; 
+        currentImg.src = src + "?t=" + new Date().getTime();
+        currentImg.onload = () => {
+            canvas.width = currentImg.width;
+            canvas.height = currentImg.height;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawBase();
+        };
     }
 
     function drawBase() {
@@ -208,106 +163,63 @@
         ctx.restore();
     }
 
-    // LÓGICA DE POSIÇÃO CORRIGIDA PARA ZOOM
     function getPos(e) {
         const rect = canvas.getBoundingClientRect();
         const clientX = e.touches ? e.touches[0].clientX : e.clientX;
         const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-        
-        // Ajusta a coordenada baseada no zoom e no deslocamento atual
-        const x = (clientX - rect.left) * (canvas.width / rect.width);
-        const y = (clientY - rect.top) * (canvas.height / rect.height);
-        return { x, y };
+        return {
+            x: (clientX - rect.left) * (canvas.width / rect.width),
+            y: (clientY - rect.top) * (canvas.height / rect.height)
+        };
     }
 
-    // MULTI-TOUCH ZOOM (PINÇA)
-    viewport.addEventListener('touchstart', (e) => {
-        if (e.touches.length === 2) {
-            isZooming = true;
-            painting = false;
-            initialPinchDistance = Math.hypot(
-                e.touches[0].clientX - e.touches[1].clientX,
-                e.touches[0].clientY - e.touches[1].clientY
-            );
-        } else if (e.touches.length === 1 && !isZooming) {
-            start(e);
-        }
-    }, { passive: false });
-
-    viewport.addEventListener('touchmove', (e) => {
-        e.preventDefault();
-        if (e.touches.length === 2 && isZooming) {
-            const currentDistance = Math.hypot(
-                e.touches[0].clientX - e.touches[1].clientX,
-                e.touches[0].clientY - e.touches[1].clientY
-            );
-            
-            if (initialPinchDistance) {
-                const delta = currentDistance / initialPinchDistance;
-                scale = Math.min(Math.max(scale * delta, 1), 5); // Zoom entre 1x e 5x
-                initialPinchDistance = currentDistance;
-                updateTransform();
-            }
-        } else if (e.touches.length === 1 && painting) {
-            move(e);
-        }
-    }, { passive: false });
-
-    viewport.addEventListener('touchend', (e) => {
-        if (e.touches.length < 2) {
-            isZooming = false;
-            initialPinchDistance = null;
-        }
-        painting = false;
-    });
-
-    // MOUSE (PC CONTINUA IGUAL)
     canvas.addEventListener('mousedown', start);
     canvas.addEventListener('mousemove', move);
     window.addEventListener('mouseup', () => painting = false);
+    canvas.addEventListener('touchstart', (e) => { e.preventDefault(); start(e.touches[0]); });
+    canvas.addEventListener('touchmove', (e) => { e.preventDefault(); move(e.touches[0]); });
 
     function start(e) {
-        if (isZooming) return;
         const pos = getPos(e);
         if (tool === 'fill') {
-            const r = parseInt(currentColor.slice(1,3),16), g = parseInt(currentColor.slice(3,5),16), b = parseInt(currentColor.slice(5,7),16);
-            floodFill(Math.round(pos.x), Math.round(pos.y), [r, g, b]);
+            const r = parseInt(currentColor.slice(1,3),16);
+            const g = parseInt(currentColor.slice(3,5),16);
+            const b = parseInt(currentColor.slice(5,7),16);
+            floodFill(Math.floor(pos.x), Math.floor(pos.y), [r, g, b]);
         } else {
             painting = true;
-            ctx.beginPath();
-            ctx.moveTo(pos.x, pos.y);
+            ctx.beginPath(); ctx.moveTo(pos.x, pos.y);
         }
     }
 
     function move(e) {
-        if (!painting || isZooming) return;
+        if (!painting || tool === 'fill') return;
         const pos = getPos(e);
         ctx.save();
         ctx.globalCompositeOperation = (tool === 'eraser') ? 'destination-out' : 'source-over';
-        ctx.lineWidth = (tool === 'eraser') ? 60 : 25;
-        ctx.strokeStyle = currentColor;
+        ctx.lineWidth = (tool === 'eraser') ? 50 : 20;
+        ctx.strokeStyle = (tool === 'eraser') ? 'rgba(0,0,0,1)' : currentColor;
         ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-        ctx.lineTo(pos.x, pos.y);
-        ctx.stroke();
+        ctx.lineTo(pos.x, pos.y); ctx.stroke();
         ctx.restore();
         drawBase();
     }
 
-    // FLOOD FILL (BALDE)
     function floodFill(startX, startY, fillRGB) {
         const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         const data = imgData.data;
         const pos = (startY * canvas.width + startX) * 4;
-        const targetR = data[pos], targetG = data[pos+1], targetB = data[pos+2], targetA = data[pos+3];
-        
-        if (targetR === 0 && targetG === 0 && targetB === 0 && targetA !== 0) return;
+        const targetR = data[pos], targetG = data[pos+1], targetB = data[pos+2];
+
+        // Se a cor for igual ou se clicar na linha preta, cancela
         if (targetR === fillRGB[0] && targetG === fillRGB[1] && targetB === fillRGB[2]) return;
+        if (targetR < 80 && targetG < 80 && targetB < 80) return;
 
         const stack = [[startX, startY]];
         while (stack.length > 0) {
             const [x, y] = stack.pop();
             const p = (y * canvas.width + x) * 4;
-            if (data[p] === targetR && data[p+1] === targetG && data[p+2] === targetB && data[p+3] === targetA) {
+            if (data[p] === targetR && data[p+1] === targetG && data[p+2] === targetB) {
                 data[p] = fillRGB[0]; data[p+1] = fillRGB[1]; data[p+2] = fillRGB[2]; data[p+3] = 255;
                 if (x + 1 < canvas.width) stack.push([x + 1, y]);
                 if (x - 1 >= 0) stack.push([x - 1, y]);
@@ -316,41 +228,24 @@
             }
         }
         ctx.putImageData(imgData, 0, 0);
-        drawBase(); 
+        drawBase();
     }
 
     function selectColor(color, el) {
-        currentColor = (color === '#000000') ? '#1a1a1a' : color;
+        currentColor = color;
         document.querySelectorAll('.c-btn').forEach(b => b.classList.remove('active'));
         el.classList.add('active');
-        if(tool === 'eraser') setTool('brush');
     }
 
     function setTool(t) {
         tool = t;
         document.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(t + 'Btn')?.classList.add('active');
+        document.getElementById(t + 'Btn').classList.add('active');
     }
 
-    function clearCanvas() { if (confirm("Apagar tudo?")) { ctx.clearRect(0, 0, canvas.width, canvas.height); drawBase(); } }
-    
-    function changeImage(src, el) {
-        if (confirm("Mudar de desenho apagará o atual.")) {
-            document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
-            el.classList.add('active');
-            loadImage(src);
-        }
-    }
+    function clearCanvas() { if (confirm("Limpar?")) { ctx.clearRect(0,0,canvas.width,canvas.height); drawBase(); } }
+    function changeImage(src, el) { loadImage(src); document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active')); el.classList.add('active'); }
 
-    function saveImage() {
-        const dataUrl = canvas.toDataURL("image/png");
-        const link = document.createElement('a');
-        link.download = 'meu-desenho-popipi.png';
-        link.href = dataUrl;
-        link.click();
-    }
-
-    window.addEventListener('resize', resizeCanvasToFit);
     window.onload = () => loadImage('1.png');
 </script>
 </body>
