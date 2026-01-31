@@ -215,7 +215,7 @@
     function changeImage(src, el) { loadImage(src); document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active')); el.classList.add('active'); }
     function saveImage() { const link = document.createElement('a'); link.download = 'desenho.png'; link.href = canvas.toDataURL(); link.click(); }
 
-    // Carrega o desenho 1.png ao iniciar
+    // Carrega o primeiro desenho automaticamente
     window.onload = () => loadImage('1.png');
 </script>
 </body>
