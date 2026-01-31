@@ -19,13 +19,11 @@
             font-family: 'Arial', sans-serif;
         }
 
-        /* Logo e Overlays */
         .logo-flutuante { position: absolute; top: 10px; left: 10px; z-index: 100; pointer-events: none; }
         .logo-flutuante img { width: 100px; height: auto; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3)); }
 
         .app-container { display: flex; width: 100vw; height: 100vh; }
 
-        /* Sidebar com scroll para as novas cores */
         .sidebar {
             width: 140px; background: var(--side-panel);
             display: flex; flex-direction: column; align-items: center;
@@ -43,20 +41,16 @@
         }
         .btn.active { background: var(--active); box-shadow: 0 4px 0 #b3b300; transform: translateY(2px); }
 
-        /* Estilo dos botões de cores */
         .c-btn { width: 44px; height: 44px; border-radius: 50%; border: 3px solid white; cursor: pointer; transition: 0.2s; box-sizing: border-box; }
         .c-btn.active { border-color: var(--active); transform: scale(1.1); box-shadow: 0 0 10px var(--active); }
 
         .main-content { flex-grow: 1; display: flex; justify-content: center; align-items: center; padding: 10px; position: relative; }
-
         #viewport { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; touch-action: none; }
-
         canvas { background: white; border-radius: 5px; box-shadow: 0 15px 40px rgba(0,0,0,0.5); max-width: 95%; max-height: 95%; cursor: crosshair; }
 
         .sidebar-right { width: 130px; border-left: 1px solid rgba(255,255,255,0.1); padding-top: 10px; overflow-y: auto; }
         .thumb { width: 90px; margin-bottom: 12px; border-radius: 10px; cursor: pointer; background: white; border: 4px solid transparent; }
         .thumb.active { border-color: var(--active); }
-
         .save-btn-large { grid-column: span 2; width: 100%; background: #2ed573 !important; color: white; font-size: 11px !important; box-shadow: 0 4px 0 #1e9651 !important; }
     </style>
 </head>
@@ -79,7 +73,6 @@
         <div class="grid" id="colorGrid">
             <div class="c-btn" style="background: #FFFFFF; border: 3px solid #ccc;" onclick="selectColor('#FFFFFF', this)"></div>
             <div class="c-btn" style="background: #A9A9A9;" onclick="selectColor('#A9A9A9', this)"></div>
-            
             <div class="c-btn active" style="background: #FFD700;" onclick="selectColor('#FFD700', this)"></div>
             <div class="c-btn" style="background: #FF8C00;" onclick="selectColor('#FF8C00', this)"></div>
             <div class="c-btn" style="background: #FF0000;" onclick="selectColor('#FF0000', this)"></div>
@@ -101,7 +94,12 @@
 
     <div class="sidebar sidebar-right">
         <div class="label">Desenhos</div>
-        <img src="image_ae055c.png" class="thumb active" onclick="changeImage('image_ae055c.png', this)">
+        <img src="1.png" class="thumb active" onclick="changeImage('1.png', this)">
+        <img src="2.png" class="thumb" onclick="changeImage('2.png', this)">
+        <img src="3.png" class="thumb" onclick="changeImage('3.png', this)">
+        <img src="4.png" class="thumb" onclick="changeImage('4.png', this)">
+        <img src="5.png" class="thumb" onclick="changeImage('5.png', this)">
+        <img src="6.png" class="thumb" onclick="changeImage('6.png', this)">
     </div>
 </div>
 
@@ -127,7 +125,7 @@
 
     function drawBase() {
         ctx.save();
-        ctx.globalCompositeOperation = 'multiply'; // Mantém as linhas pretas sempre visíveis
+        ctx.globalCompositeOperation = 'multiply';
         ctx.drawImage(currentImg, 0, 0);
         ctx.restore();
     }
@@ -180,13 +178,9 @@
         const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         const data = imgData.data;
         const pos = (startY * canvas.width + startX) * 4;
-        
         const targetR = data[pos], targetG = data[pos+1], targetB = data[pos+2];
 
-        // CORREÇÃO: Se a cor de destino for igual à cor de preenchimento, cancela para não travar
         if (targetR === fillRGB[0] && targetG === fillRGB[1] && targetB === fillRGB[2]) return;
-
-        // CORREÇÃO: Não deixa pintar em cima da linha preta (evita preencher tudo)
         if (targetR < 100 && targetG < 100 && targetB < 100) return;
 
         const stack = [[startX, startY]];
@@ -221,7 +215,8 @@
     function changeImage(src, el) { loadImage(src); document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active')); el.classList.add('active'); }
     function saveImage() { const link = document.createElement('a'); link.download = 'desenho.png'; link.href = canvas.toDataURL(); link.click(); }
 
-    window.onload = () => loadImage('image_ae055c.png');
+    // Carrega o desenho 1.png ao iniciar
+    window.onload = () => loadImage('1.png');
 </script>
 </body>
 </html>
