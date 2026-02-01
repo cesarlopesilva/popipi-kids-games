@@ -2,8 +2,8 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Popipi Kids - Studio Pro 2</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Popipi Kids - Studio Pro</title>
     <style>
         :root {
             --bg-app: #6a3093; 
@@ -13,17 +13,13 @@
 
         body, html {
             margin: 0; padding: 0;
-            width: 100%; 
-            /* svh resolve o problema do Safari cortar o fundo */
-            height: 100vh; height: 100svh; 
+            width: 100%; height: 100%;
             overflow: hidden;
             background: var(--bg-app);
             font-family: 'Arial', sans-serif;
-            -webkit-user-select: none;
-            user-select: none;
-            touch-action: none;
         }
 
+        /* TELA DE AVISO PARA GIRAR O CELULAR */
         #orientation-overlay {
             display: none;
             position: fixed;
@@ -36,13 +32,16 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            box-sizing: border-box;
+            padding: 40px;
         }
 
+        #orientation-overlay img.logo-aviso { width: 150px; margin-bottom: 30px; }
+
         .phone-icon {
-            width: 50px; height: 90px;
+            width: 60px; height: 110px;
             border: 4px solid white; border-radius: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             animation: rotatePhone 2s infinite ease-in-out;
         }
 
@@ -56,54 +55,57 @@
             position: absolute; top: 10px; left: 10px;
             z-index: 100; pointer-events: none;
         }
-        .logo-flutuante img { width: 80px; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3)); }
+        .logo-flutuante img { width: 100px; height: auto; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3)); }
 
-        .app-container { display: flex; width: 100vw; height: 100%; }
+        .app-container { display: flex; width: 100vw; height: 100vh; }
 
         .sidebar {
-            width: 130px; background: var(--side-panel);
+            width: 140px; background: var(--side-panel);
             display: flex; flex-direction: column; align-items: center;
-            padding: 10px 5px; 
-            padding-top: 60px; /* Reduzido para caber mais coisas */
+            padding: 10px 5px; padding-top: 100px; 
             overflow-y: auto; flex-shrink: 0;
-            /* Padding extra no fundo para o Safari não bloquear as últimas cores */
-            padding-bottom: 80px; 
-            -webkit-overflow-scrolling: touch;
         }
 
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
-        .label { color: white; font-size: 9px; font-weight: bold; margin: 8px 0 4px; text-transform: uppercase; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .label { color: white; font-size: 10px; font-weight: bold; margin: 10px 0 5px; text-transform: uppercase; letter-spacing: 1px; }
 
         .btn {
-            width: 45px; height: 45px; border-radius: 10px; border: none; background: white;
-            font-size: 20px; cursor: pointer; box-shadow: 0 4px 0 #bbb;
+            width: 50px; height: 50px; border-radius: 12px; border: none; background: white;
+            font-size: 24px; cursor: pointer; box-shadow: 0 4px 0 #bbb;
             display: flex; align-items: center; justify-content: center;
         }
         .btn.active { background: var(--active); box-shadow: 0 4px 0 #b3b300; transform: translateY(2px); }
 
-        .c-btn { width: 40px; height: 40px; border-radius: 50%; border: 3px solid white; cursor: pointer; }
+        .c-btn { width: 44px; height: 44px; border-radius: 50%; border: 3px solid white; cursor: pointer; transition: 0.2s; }
         .c-btn.active { border-color: var(--active); transform: scale(1.1); box-shadow: 0 0 10px var(--active); }
 
         .main-content {
             flex-grow: 1; display: flex; justify-content: center; align-items: center;
-            padding: 5px; position: relative; overflow: hidden;
+            padding: 10px; background: rgba(0,0,0,0.1); overflow: hidden;
+            position: relative;
         }
 
-        #viewport { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; }
+        /* O Canvas agora fica dentro de um container de zoom */
+        #viewport {
+            width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+            touch-action: none;
+        }
 
         canvas {
             background: white; border-radius: 5px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            max-width: 98%; max-height: 98%;
-            /* Melhora a performance de renderização no Safari */
-            image-rendering: -webkit-optimize-contrast; 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+            max-width: 95%; max-height: 95%;
+            object-fit: contain;
+            cursor: crosshair;
+            transform-origin: center center;
         }
 
-        .sidebar-right { width: 110px; border-left: 1px solid rgba(255,255,255,0.1); padding-top: 10px; }
-        .thumb { width: 80px; margin-bottom: 10px; border-radius: 8px; cursor: pointer; background: white; border: 3px solid transparent; }
-        .thumb.active { border-color: var(--active); }
+        .sidebar-right { width: 130px; border-left: 1px solid rgba(255,255,255,0.1); padding-top: 10px; }
+        .thumb { width: 90px; margin-bottom: 12px; border-radius: 10px; cursor: pointer; background: white; border: 4px solid transparent; transition: 0.2s; }
+        .thumb.active { border-color: var(--active); transform: scale(1.05); }
 
-        .save-btn-large { grid-column: span 2; width: 100%; background: #2ed573 !important; color: white; font-size: 10px !important; box-shadow: 0 4px 0 #1e9651 !important; }
+        .save-btn-large { grid-column: span 2; width: 100%; background: #2ed573 !important; color: white; font-size: 12px !important; font-weight: bold; box-shadow: 0 4px 0 #1e9651 !important; }
 
         @media screen and (orientation: portrait) { #orientation-overlay { display: flex; } }
         ::-webkit-scrollbar { width: 0; }
@@ -112,16 +114,17 @@
 <body>
 
 <div id="orientation-overlay">
+    <img src="logo.png" alt="Popipi Kids" class="logo-aviso">
     <div class="phone-icon"></div>
     <h2>Gire o celular!</h2>
-    <p>Para usar o Studio Popipi Kids, use o aparelho deitado.</p>
+    <p>Para desenhar com precisão e usar o zoom de pinça, use o aparelho deitado.</p>
 </div>
 
-<div class="logo-flutuante"><img src="logo.png"></div>
+<div class="logo-flutuante"><img src="logo.png" alt="Popipi Kids"></div>
 
 <div class="app-container">
     <div class="sidebar">
-        <div class="label">Ações</div>
+        <div class="label">Ferramentas</div>
         <div class="grid">
             <button class="btn active" id="brushBtn" onclick="setTool('brush')">✏️</button>
             <button class="btn" id="fillBtn" onclick="setTool('fill')">🪣</button>
@@ -138,12 +141,11 @@
             <div class="c-btn" style="background: #9400D3;" onclick="selectColor('#9400D3', this)"></div>
             <div class="c-btn" style="background: #00BFFF;" onclick="selectColor('#00BFFF', this)"></div>
             <div class="c-btn" style="background: #32CD32;" onclick="selectColor('#32CD32', this)"></div>
-            <div class="c-btn" style="background: #1a1a1a;" onclick="selectColor('#1a1a1a', this)"></div>
+            <div class="c-btn" style="background: #000000;" onclick="selectColor('#000000', this)"></div>
             <div class="c-btn" style="background: #00008B;" onclick="selectColor('#00008B', this)"></div>
             <div class="c-btn" style="background: #fcfcfc;" onclick="selectColor('#fcfcfc', this)"></div>
             <div class="c-btn" style="background: #8B4513;" onclick="selectColor('#8B4513', this)"></div>
-            <div class="c-btn" style="background: #008080;" onclick="selectColor('#008080', this)"></div>
-        </div>
+            <div class="c-btn" style="background: #008080;" onclick="selectColor('#008080', this)"></div>        </div>
     </div>
 
     <div class="main-content">
@@ -165,17 +167,20 @@
 
 <script>
     const canvas = document.getElementById('paintCanvas');
-    const ctx = canvas.getContext('2d', { alpha: false, willReadFrequently: true });
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
     const viewport = document.getElementById('viewport');
     
     let currentImg = new Image();
     let currentColor = '#FFD700';
     let tool = 'brush';
     let painting = false;
-    let needsRedraw = false;
 
-    // ZOOM E PAN
-    let scale = 1, translateX = 0, translateY = 0, initialPinchDistance = null, isZooming = false;
+    // VARIÁVEIS DE ZOOM E PAN
+    let scale = 1;
+    let translateX = 0;
+    let translateY = 0;
+    let initialPinchDistance = null;
+    let isZooming = false;
 
     function updateTransform() {
         canvas.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
@@ -193,7 +198,7 @@
     function loadImage(src) {
         currentImg = new Image();
         currentImg.crossOrigin = "anonymous";
-        currentImg.src = src + "?v=" + Date.now(); // Cache busting para Safari
+        currentImg.src = src;
         currentImg.onload = () => resizeCanvasToFit();
     }
 
@@ -204,43 +209,44 @@
         ctx.restore();
     }
 
-    // Otimização de renderização para Safari
-    function render() {
-        if (needsRedraw) {
-            drawBase();
-            needsRedraw = false;
-        }
-        requestAnimationFrame(render);
-    }
-    requestAnimationFrame(render);
-
+    // LÓGICA DE POSIÇÃO CORRIGIDA PARA ZOOM
     function getPos(e) {
         const rect = canvas.getBoundingClientRect();
         const clientX = e.touches ? e.touches[0].clientX : e.clientX;
         const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        
+        // Ajusta a coordenada baseada no zoom e no deslocamento atual
         const x = (clientX - rect.left) * (canvas.width / rect.width);
         const y = (clientY - rect.top) * (canvas.height / rect.height);
         return { x, y };
     }
 
-    // EVENTOS TOUCH OTIMIZADOS
+    // MULTI-TOUCH ZOOM (PINÇA)
     viewport.addEventListener('touchstart', (e) => {
         if (e.touches.length === 2) {
-            isZooming = true; painting = false;
-            initialPinchDistance = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+            isZooming = true;
+            painting = false;
+            initialPinchDistance = Math.hypot(
+                e.touches[0].clientX - e.touches[1].clientX,
+                e.touches[0].clientY - e.touches[1].clientY
+            );
         } else if (e.touches.length === 1 && !isZooming) {
             start(e);
         }
     }, { passive: false });
 
     viewport.addEventListener('touchmove', (e) => {
-        e.preventDefault(); 
+        e.preventDefault();
         if (e.touches.length === 2 && isZooming) {
-            const dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+            const currentDistance = Math.hypot(
+                e.touches[0].clientX - e.touches[1].clientX,
+                e.touches[0].clientY - e.touches[1].clientY
+            );
+            
             if (initialPinchDistance) {
-                const delta = dist / initialPinchDistance;
-                scale = Math.min(Math.max(scale * delta, 1), 5);
-                initialPinchDistance = dist;
+                const delta = currentDistance / initialPinchDistance;
+                scale = Math.min(Math.max(scale * delta, 1), 5); // Zoom entre 1x e 5x
+                initialPinchDistance = currentDistance;
                 updateTransform();
             }
         } else if (e.touches.length === 1 && painting) {
@@ -248,8 +254,15 @@
         }
     }, { passive: false });
 
-    viewport.addEventListener('touchend', () => { isZooming = false; painting = false; });
+    viewport.addEventListener('touchend', (e) => {
+        if (e.touches.length < 2) {
+            isZooming = false;
+            initialPinchDistance = null;
+        }
+        painting = false;
+    });
 
+    // MOUSE (PC CONTINUA IGUAL)
     canvas.addEventListener('mousedown', start);
     canvas.addEventListener('mousemove', move);
     window.addEventListener('mouseup', () => painting = false);
@@ -278,23 +291,24 @@
         ctx.lineTo(pos.x, pos.y);
         ctx.stroke();
         ctx.restore();
-        needsRedraw = true; // Agenda o redesenho do multiply
+        drawBase();
     }
 
+    // FLOOD FILL (BALDE)
     function floodFill(startX, startY, fillRGB) {
         const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         const data = imgData.data;
         const pos = (startY * canvas.width + startX) * 4;
-        const targetR = data[pos], targetG = data[pos+1], targetB = data[pos+2];
+        const targetR = data[pos], targetG = data[pos+1], targetB = data[pos+2], targetA = data[pos+3];
         
-        if (targetR < 50 && targetG < 50 && targetB < 50) return;
+        if (targetR === 0 && targetG === 0 && targetB === 0 && targetA !== 0) return;
         if (targetR === fillRGB[0] && targetG === fillRGB[1] && targetB === fillRGB[2]) return;
 
         const stack = [[startX, startY]];
         while (stack.length > 0) {
             const [x, y] = stack.pop();
             const p = (y * canvas.width + x) * 4;
-            if (data[p] === targetR && data[p+1] === targetG && data[p+2] === targetB) {
+            if (data[p] === targetR && data[p+1] === targetG && data[p+2] === targetB && data[p+3] === targetA) {
                 data[p] = fillRGB[0]; data[p+1] = fillRGB[1]; data[p+2] = fillRGB[2]; data[p+3] = 255;
                 if (x + 1 < canvas.width) stack.push([x + 1, y]);
                 if (x - 1 >= 0) stack.push([x - 1, y]);
@@ -303,7 +317,7 @@
             }
         }
         ctx.putImageData(imgData, 0, 0);
-        drawBase();
+        drawBase(); 
     }
 
     function selectColor(color, el) {
@@ -322,19 +336,24 @@
     function clearCanvas() { if (confirm("Apagar tudo?")) { ctx.clearRect(0, 0, canvas.width, canvas.height); drawBase(); } }
     
     function changeImage(src, el) {
-        document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
-        el.classList.add('active');
-        loadImage(src);
+        if (confirm("Mudar de desenho apagará o atual.")) {
+            document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+            loadImage(src);
+        }
     }
 
     function saveImage() {
+        const dataUrl = canvas.toDataURL("image/png");
         const link = document.createElement('a');
-        link.download = 'desenho-popipi.png';
-        link.href = canvas.toDataURL("image/png");
+        link.download = 'meu-desenho-popipi.png';
+        link.href = dataUrl;
         link.click();
     }
 
+    window.addEventListener('resize', resizeCanvasToFit);
     window.onload = () => loadImage('1.png');
 </script>
 </body>
 </html>
+
